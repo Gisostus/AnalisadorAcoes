@@ -633,7 +633,12 @@ class AnalisadorAcoesReais:
                 self.dados_acao['preco_atual'], 
                 self.dados_acao['preco_anterior']
             )
-            
+
+            # Calcular Retention Ratio para o gráfico
+            dados_fundamentalistas = self.buscar_dados_fundamentalistas(
+                self.formatar_codigo_acao(self.dados_acao['simbolo'].replace('.SA', '')))
+            retention_ratio, retention_interpretacao = self.calcular_retention_ratio(dados_fundamentalistas)
+
             # Preparar dados para JavaScript
             labels = [item['data'] for item in historico]
             precos = [item['preco'] for item in historico]
@@ -744,9 +749,9 @@ class AnalisadorAcoesReais:
                 <h3>Variação</h3>
                 <div class="value">{variacao:+.2f}%</div>
             
-            <div class="info-card">
+    <div class="info-card">
     <h3>Retention Ratio</h3>
-    <div class="value">{retention_ratio if retention_ratio else 'N/A'}%</div>
+    <div class="value">{retention_ratio if retention_ratio else 'N/A'}{'%' if retention_ratio else ''}</div>
 </div>
             
             </div>
